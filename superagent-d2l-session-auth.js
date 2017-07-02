@@ -53,8 +53,15 @@ module.exports = function(getJwt, opts) {
 				return this;
 			}
 
+			if (opts.telemetry) {
+				opts.telemetry.start();
+			}
+
 			getJwt(opts.scope)
 				.then(function(token) {
+					if (opts.telemetry) {
+						opts.telemetry.end(token);
+					}
 					req.set('Authorization', 'Bearer ' + token);
 				})
 				.catch(noop)
